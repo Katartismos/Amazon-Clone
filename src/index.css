@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+@theme {
+  --breakpoint-custom-5xs: 800px;
+  --breakpoint-custom-4xs: 900px;
+  --breakpoint-custom-3xs: 950px;
+  --breakpoint-custom-2xs: 1000px;
+  --breakpoint-custom-xs: 1050px;
+  --breakpoint-custom-sm: 1100px;
+  --breakpoint-custom-md: 1150px;
+  --breakpoint-custom-lg: 1200px;
+  --breakpoint-custom-xl: 1250px;
+  --breakpoint-custom-2xl: 1300px;
+  --breakpoint-custom-3xl: 1350px;
+  --breakpoint-custom-4xl: 1400px;
+  --breakpoint-custom-5xl: 1450px;
+  --breakpoint-custom-6xl: 1500px;
+}

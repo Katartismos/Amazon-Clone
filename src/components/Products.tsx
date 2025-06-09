@@ -1,8 +1,8 @@
-import { loadProducts } from '../scripts/data/product'
+import { useProducts } from '../scripts/data/products'
 
 const Products = () => {
   
-  const { products } = loadProducts();
+  const { products } = useProducts();
   
   console.log(products);
 

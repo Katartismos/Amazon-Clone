@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@js-joda/core": "^5.6.5",
-    "@js-joda/locale": "^4.15.2",
+    "@js-joda/locale_en": "^4.15.1",
     "@tailwindcss/vite": "^4.1.8",
     "axios": "^1.9.0",
     "react": "^19.1.0",

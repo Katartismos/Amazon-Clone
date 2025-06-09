@@ -78,16 +78,20 @@ class Product {
   }
 }
 
-export function loadProducts() {
+export function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    axios.get<ProductDTO[]>("http://localhost:3001/products")
+    const fetchProducts =  () => {
+      axios.get<ProductDTO[]>("http://localhost:3001/products")
       .then(response => {
         const converted = response.data.map(Product.fromJSON);
         setProducts(converted);
       })
       .catch(error => console.error(error));
+    };
+
+    fetchProducts();
   }, []);
 
   return { products };
