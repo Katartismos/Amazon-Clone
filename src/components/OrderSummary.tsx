@@ -40,7 +40,7 @@ const OrderSummary = () => {
                     Quantity: <span className="">{cartItem.quantity}</span>
                   </span>
 
-                  <span className="text-[hsl(187,97%,36%)] hover:text-amber-600 cursor-pointer">Update </span>
+                  <span className="text-[hsl(187,97%,36%)] hover:text-amber-600 cursor-pointer"> Update </span>
 
                   <input className="w-10 hidden" type="text" />
                   <span className="text-[hsl(187,97%,36%)] hover:text-amber-600 cursor-pointer">Save</span>
