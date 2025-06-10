@@ -1,10 +1,10 @@
-import { loadCartItems } from '../scripts/data/cart'
+import { useCartItems } from '../scripts/data/cart'
 import { useProducts } from '../scripts/data/products'
 import { calculateDeliveryDate, deliveryOptions, getDeliveryOption } from '../scripts/data/deliveryOptions'
 import formatCurrency from '../scripts/utils/money'
 
 const OrderSummary = () => {
-  const { cart } = loadCartItems();
+  const { cart } = useCartItems();
   const { products } = useProducts();
 
   console.log(products);

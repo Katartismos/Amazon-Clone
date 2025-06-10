@@ -31,7 +31,7 @@ class CartItem {
   }
 }
 
-export function loadCartItems() {
+export function useCartItems() {
   const [cart, setCartItem] = useState<CartItem[]>([]);
 
   useEffect(() => {

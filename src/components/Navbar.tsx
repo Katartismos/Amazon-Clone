@@ -1,4 +1,20 @@
+import { useCartItems } from '../scripts/data/cart'
+
 const Navbar = () => {
+  const { cart } = useCartItems();
+
+  function calculateCartQuantity() {
+    let cartQuantity = 0;
+
+    cart.forEach((cartItem) => {
+      cartQuantity += cartItem.quantity;
+    });
+
+    return cartQuantity;
+  }
+
+  const cartQuantity = calculateCartQuantity();
+
   return (
     <nav className="bg-[hsl(214,27%,10%)] text-white px-3.75 flex items-center justify-between fixed top-0 left-0 right-0 h-20">
       <div className="md:w-60 w-auto">
@@ -29,8 +45,10 @@ const Navbar = () => {
 
         <a className="text-white flex items-center relative p-1.5 rounded-xs cursor-pointer no-underline border border-solid border-transparent hover:border-white" href="/checkout">
           <img className="w-15" src="/images/icons/cart-icon.png" alt="Cart icon" />
-          <div className="text-amber-600 text-2xl font-bold absolute top-1 left-5.5 w-10 text-center">3</div>
-          <div className="mt-3 text-xs font-bold">Cart</div>
+          <div className="text-amber-600 text-2xl font-bold absolute top-1 left-5.5 w-10 text-center">
+            {cartQuantity}
+          </div>
+          <div className="mt-3 text-lg font-bold">Cart</div>
         </a>
       </div>
     </nav>

@@ -1,10 +1,7 @@
 import { useProducts } from '../scripts/data/products'
 
 const Products = () => {
-  
   const { products } = useProducts();
-  
-  console.log(products);
 
   return (
     <main 

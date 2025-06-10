@@ -1,4 +1,20 @@
+import { useCartItems } from '../scripts/data/cart'
+
 const CheckoutHeader = () => {
+  const { cart } = useCartItems();
+
+  function calculateCartQuantity() {
+    let cartQuantity = 0;
+
+    cart.forEach((cartItem) => {
+      cartQuantity += cartItem.quantity;
+    });
+
+    return cartQuantity;
+  }
+
+  const cartQuantity = calculateCartQuantity();
+
   return (
     <nav className="h-20 px-7.5 bg-white flex justify-center fixed top-0 left-0 right-0 font-[Roboto]">
       <div className="w-full flex items-center justify-between">
@@ -14,11 +30,11 @@ const CheckoutHeader = () => {
           </a>
         </div>
 
-        <div className="flex-1 shrink-0 text-center mr-2 sm:mr-17.5 text-[30px] lg:text-4xl font-[600] flex justify-center">
-          Checkout (<a href="/" className="text-[hsl(187,100%,26%)] text-[28px] lg:text-3xl no-underline cursor-pointer">3 items</a>)
+        <div className="flex-1 shrink-0 text-center mr-2 text-[30px] lg:text-4xl font-[600] flex justify-center">
+          Checkout (<a href="/" className="text-[hsl(187,100%,26%)] text-[28px] lg:text-3xl no-underline cursor-pointer">{cartQuantity} items</a>)
         </div>
 
-        <div className="w-auto lg:w-40 flex justify-end">
+        <div className="w-auto lg:w-30 flex justify-end">
           <img src="/images/icons/checkout-lock-icon.png" />
         </div>
       </div>
