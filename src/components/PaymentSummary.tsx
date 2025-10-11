@@ -1,23 +1,28 @@
-import { useCartItems } from '../scripts/data/cart'
-import { useProducts } from '../scripts/data/products'
+import { useState, useEffect } from 'react'
+import { useData } from './HooksContext'
 import { getDeliveryOption } from '../scripts/data/deliveryOptions'
 import formatCurrency from '../scripts/utils/money'
 
 const PaymentSummary = () => {
-  const { cart } = useCartItems();
-  const { products } = useProducts();
+  const { products, cart } = useData();
+  
+  const [cartQuantity, setCartQuantity] = useState(0);
 
   function calculateCartQuantity() {
-    let cartQuantity = 0;
+    let total = 0;
 
     cart.forEach((cartItem) => {
-      cartQuantity += cartItem.quantity;
+      total += cartItem.quantity;
     });
 
-    return cartQuantity;
+    setCartQuantity(total);
   }
 
-  const cartQuantity = calculateCartQuantity();
+  useEffect(() => {
+    calculateCartQuantity();
+  }, [cart]);
+
+  console.log(cartQuantity);
 
   let productPriceCents = 0;
   let shippingPriceCents = 0;

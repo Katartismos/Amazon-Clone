@@ -2,7 +2,7 @@ import formatCurrency from '../utils/money';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-interface ProductDTO {
+export interface ProductDTO {
   id: string;
   image: string;
   name: string;

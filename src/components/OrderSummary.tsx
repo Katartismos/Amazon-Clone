@@ -1,11 +1,10 @@
-import { useCartItems } from '../scripts/data/cart'
-import { useProducts } from '../scripts/data/products'
+import { useState } from 'react'
+import { useData } from './HooksContext' 
 import { calculateDeliveryDate, deliveryOptions, getDeliveryOption } from '../scripts/data/deliveryOptions'
 import formatCurrency from '../scripts/utils/money'
 
 const OrderSummary = () => {
-  const { cart } = useCartItems();
-  const { products } = useProducts();
+  const { products, cart } = useData();
 
   console.log(products);
   console.log(cart);
@@ -17,6 +16,21 @@ const OrderSummary = () => {
 
         if (!matchingProduct) {
           return null; // Skip rendering if no matching product is found
+        }
+
+        const [isEditing, setIsEditing] = useState(false);
+        const [tempQuantity, setTempQuantity] = useState(cartItem.quantity);
+        const [quantity, setQuantity] = useState<number>(1);
+
+        function handleUpdateClick() {
+          setIsEditing(true);
+          setTempQuantity(cartItem.quantity);
+        }
+
+        function handleSaveClick() {
+          setQuantity(tempQuantity);
+          setIsEditing(false);
+          // Here I would also update the cart in my backend
         }
 
         return (
@@ -40,10 +54,22 @@ const OrderSummary = () => {
                     Quantity: <span className="">{cartItem.quantity}</span>
                   </span>
 
-                  <span className="text-[hsl(187,97%,36%)] hover:text-amber-600 cursor-pointer"> Update </span>
+                  {!isEditing && (
+                    <>
+                      <span className="text-[hsl(187,97%,36%)] hover:text-amber-600 cursor-pointer" onClick={handleUpdateClick}> Update </span>
+                    </>
+                  )}
 
-                  <input className="w-10 hidden" type="text" />
-                  <span className="text-[hsl(187,97%,36%)] hover:text-amber-600 cursor-pointer">Save</span>
+                  {isEditing && (
+                    <>
+                      <input 
+                        className="w-10 border" 
+                        type="number" 
+                        onChange={(e) => setTempQuantity(Number(e.target.value))}
+                      />
+                      <span className="text-[hsl(187,97%,36%)] hover:text-amber-600 cursor-pointer" onClick={handleSaveClick}>Save</span>
+                    </>
+                  )}
 
                   <span className="text-[hsl(187,97%,36%)] hover:text-amber-600 cursor-pointer">Delete</span>
                 </div>
@@ -70,7 +96,7 @@ const OrderSummary = () => {
                           className="ml-0 cursor-pointer"
                           name={`delivery-option-${matchingProduct.id}`} 
                         />
-                        <div>
+                        <div className="ml-3">
                           <div className="text-[hsl(120,100%,23.15%)] font-[600] mb-2.5">
                             ${dateString}
                           </div>

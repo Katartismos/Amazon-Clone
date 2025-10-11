@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-interface CartItemDTO {
+export interface CartItemDTO {
   productId: string;
   quantity: number;
   deliveryOptionId: string;
@@ -45,3 +45,4 @@ export function useCartItems() {
 
   return { cart };
 }
+
