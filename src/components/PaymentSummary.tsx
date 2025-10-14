@@ -28,7 +28,7 @@ const PaymentSummary = () => {
   let shippingPriceCents = 0;
 
   cart.forEach(cartItem => {
-    const product = products.find(product => cartItem.productId === product.id);
+    const product = products.find(product => cartItem.id === product.id);
     if (!product) return null;
     productPriceCents += product.priceCents * cartItem.quantity;
 

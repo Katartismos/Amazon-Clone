@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useData } from './HooksContext' 
-import { calculateDeliveryDate, deliveryOptions, getDeliveryOption } from '../scripts/data/deliveryOptions'
-import formatCurrency from '../scripts/utils/money'
+import axios from 'axios'
+import { useData } from './HooksContext'
+import { cartUrl } from '../scripts/data/cart'
+import OrderCard from './Order'
 
 const OrderSummary = () => {
   const { products, cart } = useData();
@@ -10,9 +11,9 @@ const OrderSummary = () => {
   console.log(cart);
 
   return (
-    <div>
+    <section>
       {cart.map(cartItem => {
-        const matchingProduct = products.find(product => product.id === cartItem.productId);
+        const matchingProduct = products.find(product => product.id === cartItem.id);
 
         if (!matchingProduct) {
           return null; // Skip rendering if no matching product is found
@@ -20,7 +21,7 @@ const OrderSummary = () => {
 
         const [isEditing, setIsEditing] = useState(false);
         const [tempQuantity, setTempQuantity] = useState(cartItem.quantity);
-        const [quantity, setQuantity] = useState<number>(1);
+        const [quantity, setQuantity] = useState<number>(cartItem.quantity);
 
         function handleUpdateClick() {
           setIsEditing(true);
@@ -28,92 +29,73 @@ const OrderSummary = () => {
         }
 
         function handleSaveClick() {
+          const prev = cartItem.quantity;
+
+          // apply the temp value to the displayed quantity immediately
           setQuantity(tempQuantity);
-          setIsEditing(false);
-          // Here I would also update the cart in my backend
+
+          // update the cartItem locally to keep UI in sync
+          cartItem.quantity = tempQuantity;
+
+          // send update to backend (using axios with .then/.catch as requested)
+          // assuming an API endpoint like /api/cart/:id or /cart/:id; adjust as needed
+          axios.patch(`${cartUrl}/${cartItem.id}`, { quantity: tempQuantity })
+          .then(() => {
+            console.log(cartItem);
+            setIsEditing(false);
+          })
+          .catch(() => {
+            // revert local change on failure
+            cartItem.quantity = prev;
+            setQuantity(prev);
+          });
         }
 
+        function handleDeleteClick() {
+          const answer = confirm("Are you sure you want to delete this item from your cart?");
+          if (!answer) return;
+
+          axios.delete(`${cartUrl}/${cartItem.id}`)
+          .then(() => {
+            console.log('Item deleted successfully.');
+          })
+          .catch(() => {
+            console.error('Failed to delete item');
+          });
+        }
+
+        const [selectedDeliveryOptionId, setSelectedDeliveryOptionId] = useState<string>(cartItem.deliveryOptionId);
+
+        const handleDeliveryOptionChange = (newDeliveryOptionId: string) => {
+          setSelectedDeliveryOptionId(newDeliveryOptionId);
+          // Update the cart item locally to keep UI in sync
+          // cartItem.deliveryOptionId = newDeliveryOptionId;
+          axios.patch(`${cartUrl}/${cartItem.id}`, { deliveryOptionId: newDeliveryOptionId })
+          .then(() => {
+            console.log(cartItem);
+          })
+          .catch(() => {
+            console.error('Failed to update deliveryOptionId')
+          });
+        };
+
         return (
-          <div key={cartItem.productId} className="border border-[hsl(0,0%,87.1%)] rounded-md p-5 mb-4">
-            <div className="text-[hsl(120,100%,23.15%)] font-semibold text-[19px] mt-2 mb-6">
-              {calculateDeliveryDate(getDeliveryOption(cartItem.deliveryOptionId))}
-            </div>
-
-            <div className="grid grid-cols-[100px_1fr] lg:grid-cols-[100px_1fr_1fr] gap-7.5">
-              <img src={matchingProduct.image} alt="No product found" className="max-w-full max-h-32.5 " />
-
-              <div>
-                <div className="font-[600] mb-2.5">
-                  {matchingProduct.name}
-                </div>
-
-                <div className="text-[hsl(9,96%,35%)] font-[600] mb-2">{matchingProduct.getPrice()}</div>
-
-                <div className="ml-1">
-                  <span>
-                    Quantity: <span className="">{cartItem.quantity}</span>
-                  </span>
-
-                  {!isEditing && (
-                    <>
-                      <span className="text-[hsl(187,97%,36%)] hover:text-amber-600 cursor-pointer" onClick={handleUpdateClick}> Update </span>
-                    </>
-                  )}
-
-                  {isEditing && (
-                    <>
-                      <input 
-                        className="w-10 border" 
-                        type="number" 
-                        onChange={(e) => setTempQuantity(Number(e.target.value))}
-                      />
-                      <span className="text-[hsl(187,97%,36%)] hover:text-amber-600 cursor-pointer" onClick={handleSaveClick}>Save</span>
-                    </>
-                  )}
-
-                  <span className="text-[hsl(187,97%,36%)] hover:text-amber-600 cursor-pointer">Delete</span>
-                </div>
-              </div>
-
-              <div className="max-lg:col-span-full">
-                <div className="font-[600] mb-2.5">
-                  Choose a delivery option:
-                </div>
-                {
-                  deliveryOptions.map(deliveryOption => {
-                    const dateString = calculateDeliveryDate(deliveryOption)
-                    const priceString = deliveryOption.priceCents === 0
-                      ? 'FREE'
-                      : formatCurrency(deliveryOption.priceCents)
-
-                    const isSelected = deliveryOption.id === cartItem.deliveryOptionId;
-
-                    return (
-                      <div key={deliveryOption.id} className="grid grid-cols-[24px_1fr] cursor-pointer mb-3">
-                        <input 
-                          type="radio"
-                          {...isSelected ? { checked: true } : { checked: false }}
-                          className="ml-0 cursor-pointer"
-                          name={`delivery-option-${matchingProduct.id}`} 
-                        />
-                        <div className="ml-3">
-                          <div className="text-[hsl(120,100%,23.15%)] font-[600] mb-2.5">
-                            ${dateString}
-                          </div>
-                          <div className="text-[hsl(0,0%,47%)]">
-                            ${priceString} - Shipping
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })
-                }
-              </div>
-            </div>
-          </div>
+          <OrderCard
+            key={cartItem.id}
+            cartItem={cartItem} 
+            matchingProduct={matchingProduct} 
+            isEditing={isEditing} 
+            handleUpdateClick={handleUpdateClick} 
+            handleSaveClick={handleSaveClick}
+            handleDeleteClick={handleDeleteClick}
+            quantity={quantity}
+            currentSelectedId={selectedDeliveryOptionId}
+            onDeliveryChange={handleDeliveryOptionChange}
+            setTempQuantity={setTempQuantity}
+          />
         )
       })}
-    </div>
+    </section>
   )
 }
 

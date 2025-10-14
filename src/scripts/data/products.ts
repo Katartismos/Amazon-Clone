@@ -16,7 +16,7 @@ export interface ProductDTO {
   sizeChartLink?: string;
 }
 
-class Product {
+export class Product {
   id: string;
   image: string;
   name: string;
