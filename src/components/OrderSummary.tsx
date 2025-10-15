@@ -1,8 +1,13 @@
 import { useData } from './HooksContext'
 import OrderCard from './Order'
+import EmptyCart from './EmptyCart'
 
 const OrderSummary = () => {
   const { products, cart } = useData();
+
+  if (!cart || cart.length === 0) {
+    return <EmptyCart />;
+  }
 
   return (
     <section>
