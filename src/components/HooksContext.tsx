@@ -1,17 +1,17 @@
-import React, { createContext, useContext } from 'react'
+import React, { useContext } from 'react'
 import { useProducts } from '../scripts/data/products'
 import { useCartItems } from '../scripts/data/cart'
-
-type HooksContextType = ReturnType<typeof useProducts> & ReturnType<typeof useCartItems>;
-
-const HooksContext = createContext<HooksContextType | undefined>(undefined);
+import HooksContext from '../scripts/data/context'
 
 export const HooksContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const  products  = useProducts();
-  const  cart  = useCartItems();
+  const products = useProducts();
+  const cartHooks = useCartItems();
+
+  // combine hooks into one provider value
+  const value = { ...products, ...cartHooks };
 
   return (
-    <HooksContext.Provider value={{ ...products, ...cart }}>
+    <HooksContext.Provider value={value}>
       { children }
     </HooksContext.Provider>
   );

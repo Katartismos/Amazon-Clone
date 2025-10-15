@@ -8,18 +8,12 @@ const PaymentSummary = () => {
   
   const [cartQuantity, setCartQuantity] = useState(0);
 
-  function calculateCartQuantity() {
+  useEffect(() => {
     let total = 0;
-
     cart.forEach((cartItem) => {
       total += cartItem.quantity;
     });
-
     setCartQuantity(total);
-  }
-
-  useEffect(() => {
-    calculateCartQuantity();
   }, [cart]);
 
   console.log(cartQuantity);
