@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
-import { useData } from './HooksContext'
+import { useData } from './useData'
 import { cartUrl, type CartItem } from '../scripts/data/cart'
 import ProductCard from './Product'
 

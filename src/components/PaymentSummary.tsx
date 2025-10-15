@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useData } from './HooksContext'
+import { useData } from './useData'
 import { getDeliveryOption } from '../scripts/data/deliveryOptions'
 import formatCurrency from '../scripts/utils/money'
 

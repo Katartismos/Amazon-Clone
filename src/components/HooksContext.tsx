@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useProducts } from '../scripts/data/products'
 import { useCartItems } from '../scripts/data/cart'
 import HooksContext from '../scripts/data/context'
@@ -17,11 +17,5 @@ export const HooksContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
   );
 };
 
-export function useData() {
-  const context = useContext(HooksContext);
-
-  if (!context) {
-    throw new Error("useData must be used inside HooksContextProvider");
-  }
-  return context;
-}
+// Note: `useData` has been moved to `src/components/useData.ts` to keep this file
+// exporting components only (improves Fast Refresh behavior).
