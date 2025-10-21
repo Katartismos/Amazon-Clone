@@ -1,19 +1,17 @@
-import { useCartItems } from '../scripts/data/cart'
+import { useData } from '../scripts/data/useData'
+import { useState, useEffect } from 'react'
 
 const CheckoutHeader = () => {
-  const { cart } = useCartItems();
+  const { cart } = useData();
+  const [cartQuantity, setCartQuantity] = useState(0);
 
-  function calculateCartQuantity() {
-    let cartQuantity = 0;
-
+  useEffect(() => {
+    let total = 0;
     cart.forEach((cartItem) => {
-      cartQuantity += cartItem.quantity;
+      total += cartItem.quantity;
     });
-
-    return cartQuantity;
-  }
-
-  const cartQuantity = calculateCartQuantity();
+    setCartQuantity(total);
+  }, [cart]);
 
   return (
     <nav className="h-20 px-7.5 bg-white flex justify-center fixed top-0 left-0 right-0 font-[Roboto]">

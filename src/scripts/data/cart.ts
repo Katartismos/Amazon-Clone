@@ -31,7 +31,7 @@ export class CartItem {
   }
 }
 
-export const cartUrl = "http://localhost:3001/cart";
+export const cartUrl = "http://localhost:2000/api/cart";
 
 
 export function useCartItems() {
@@ -123,5 +123,3 @@ export function useCartItems() {
   return { cart, refetch }; 
 }
 */
-
-export function updateCartItem() {}

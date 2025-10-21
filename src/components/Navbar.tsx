@@ -1,19 +1,17 @@
-import { useCartItems } from '../scripts/data/cart'
+import { useState, useEffect } from 'react'
+import { useData } from '../scripts/data/useData'
 
 const Navbar = () => {
-  const { cart } = useCartItems();
+  const { cart } = useData();
+  const [cartQuantity, setCartQuantity] = useState(0);
 
-  function calculateCartQuantity() {
-    let cartQuantity = 0;
-
+  useEffect(() => {
+    let total = 0;
     cart.forEach((cartItem) => {
-      cartQuantity += cartItem.quantity;
+      total += cartItem.quantity;
     });
-
-    return cartQuantity;
-  }
-
-  const cartQuantity = calculateCartQuantity();
+    setCartQuantity(total);
+  }, [cart]);
 
   return (
     <nav className="bg-[hsl(214,27%,10%)] text-white px-3.75 flex items-center justify-between fixed top-0 left-0 right-0 h-20">
