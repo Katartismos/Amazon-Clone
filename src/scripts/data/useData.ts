@@ -1,6 +1,6 @@
 import { useContext } from 'react'
-import HooksContext from '../scripts/data/context'
-import type { HooksContextType } from '../scripts/data/context'
+import HooksContext from './context'
+import type { HooksContextType } from './context'
 
 export function useData() {
   const context = useContext(HooksContext);

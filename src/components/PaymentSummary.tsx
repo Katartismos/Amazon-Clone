@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useData } from './useData'
+import { useData } from '../scripts/data/useData'
 import { getDeliveryOption } from '../scripts/data/deliveryOptions'
 import formatCurrency from '../scripts/utils/money'
 

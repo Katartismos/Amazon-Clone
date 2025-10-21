@@ -3,7 +3,7 @@ import { calculateDeliveryDate, deliveryOptions, getDeliveryOption } from '../sc
 import type { CartItem } from '../scripts/data/cart'
 import type { Product } from '../scripts/data/products'
 import formatCurrency from '../scripts/utils/money'
-import { useData } from './useData'
+import { useData } from '../scripts/data/useData'
 
 interface OrderProps {
   cartItem: CartItem,
