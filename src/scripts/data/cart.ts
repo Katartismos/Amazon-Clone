@@ -31,7 +31,7 @@ export class CartItem {
   }
 }
 
-export const cartUrl = "http://localhost:2000/api/cart";
+export const cartUrl = "https://amazon-clone-backend-six.vercel.app/api/cart";
 
 
 export function useCartItems() {
