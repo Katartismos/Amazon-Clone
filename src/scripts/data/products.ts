@@ -78,12 +78,14 @@ export class Product {
   }
 }
 
+const productsUrl = "http://localhost:2000/api/products";
+
 export function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchProducts =  () => {
-      axios.get<ProductDTO[]>("http://localhost:3001/products")
+      axios.get<ProductDTO[]>(productsUrl)
       .then(response => {
         const converted = response.data.map(Product.fromJSON);
         setProducts(converted);
